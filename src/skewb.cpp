@@ -15,12 +15,15 @@ const unsigned char SOLVED_CORNER_ROT[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 enum { ORANGE = 0, RED, YELLOW, WHITE, GREEN, BLUE };
 
 // Corners
-const unsigned char OYG = 0;
-const unsigned char OYG = 0;
-const unsigned char Y0G = 0;
-const unsigned char YGO = 0;
-const unsigned char GOY = 0;
-const unsigned char GYO = 0;
+const unsigned char OGY = 0;
+const unsigned char OYB = 1;
+const unsigned char OBW = 2;
+const unsigned char OWG = 3;
+
+const unsigned char RYG = 4;
+const unsigned char RBY = 5;
+const unsigned char RWB = 6;
+const unsigned char RGW = 7;
 
 class Skewb
 {
@@ -557,15 +560,9 @@ int main(int argc, char* argv[])
         // Front left: 5 (Blue)
 
 
-        const unsigned char centerPos[] = { 2, 3, 2, 1, 3, 5 };
-        const unsigned char cornerPos[] = { 0, 3, 2, 1, 6, 5, 4, 7 };
-        const unsigned char cornerRot[] = { 0, 1, 2, 1, 1, 2, 0, 2 };
-
-/*
-        const unsigned char centerPos[] = { 0, 1, 2, 3, 4, 5 };
-        const unsigned char cornerPos[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
-        const unsigned char cornerRot[] = { 0, 0, 0, 0, 0, 1, 0, 2 };
-*/
+        const unsigned char centerPos[] = { YELLOW, RED, ORANGE, BLUE, GREEN, WHITE };
+        const unsigned char cornerPos[] = { OGY, OYB, OBW, RYG, RWB, RBY, OWG, RGW };
+        const unsigned char cornerRot[] = { 0, 2, 1, 1, 1, 0, 1, 0 };
 
         Skewb skewb(centerPos, cornerPos, cornerRot);
         uint64_t stateNum = skewb.getStateNum();
