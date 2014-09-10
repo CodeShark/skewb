@@ -422,7 +422,7 @@ bool SolutionTable::addEntry(uint64_t prevState, uint64_t newState, Skewb::move_
 
 std::vector<Skewb::move_t> SolutionTable::getSolution(uint64_t state) const
 {
-    const Tab& it = m_table.find(state);
+    auto it = m_table.find(state);
     if (it == m_table.end()) throw std::runtime_error("State not found.");
 
     std::vector<Skewb::move_t> solution;
