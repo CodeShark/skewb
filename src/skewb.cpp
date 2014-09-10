@@ -150,7 +150,7 @@ void Skewb::setStateNum(uint64_t stateNum)
         stateNum /= i;
     }
     for (int i = 4; i >= 0; i--)
-        for (int j = i + i; j < 6; j++)
+        for (int j = i + 1; j < 6; j++)
             if (m_centerPos[j] >= m_centerPos[i]) m_centerPos[j]++;
 }
 
@@ -464,7 +464,10 @@ void SolutionTable::pushNextState(const LastState& state, Skewb::move_t move, st
         skewb.makeMove(move);
         uint64_t stateNum = skewb.getStateNum();
         if (addEntry(state.first, stateNum, move))
+        {
+//            std::cout << "Added " << stateNum << std::endl;
             nextStates.push_back(LastState(stateNum, move));
+        }
     }
 }
 
@@ -522,8 +525,10 @@ int main(int argc, char* argv[])
         Skewb skewb;
         skewb.makeMove(Skewb::UP_C);
         skewb.makeMove(Skewb::RIGHT_CC);
+        uint64_t stateNum = skewb.getStateNum();
 
-        cout << "Solution: " << solutions.getSolutionStr(skewb.getStateNum()) << endl;
+        cout << "Solving state " << stateNum << "..." << endl;
+        cout << "Solution: " << solutions.getSolutionStr(stateNum) << endl;
     }
     catch (const exception& e)
     {
