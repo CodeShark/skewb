@@ -386,6 +386,7 @@ private:
 };
 
 typedef std::pair<uint64_t, TableEntry> TablePair;
+typedef std::pair<uint64_t, Skewb::move_t> LastState;
 
 class SolutionTable
 {
@@ -403,6 +404,8 @@ public:
 private:
     std::map<uint64_t, TableEntry> m_table;
     int m_maxDistance;
+
+    void pushNextState(const LastState& state, Skewb::move_t move, std::vector<LastState>& nextStates);
 };
 
 SolutionTable::SolutionTable() : m_maxDistance(0)
@@ -417,7 +420,9 @@ bool SolutionTable::addEntry(uint64_t prevState, uint64_t newState, Skewb::move_
     const auto& it = m_table.find(prevState);
     if (it == m_table.end()) throw std::runtime_error("Previous entry not found.");
 
-    m_table.insert(TablePair(newState, TableEntry(prevState, it->second.getDistance() + 1, move))); 
+    int distance = it->second.getDistance() + 1;
+    if (distance > m_maxDistance) { m_maxDistance = distance; }
+    m_table.insert(TablePair(newState, TableEntry(prevState, distance, move))); 
 
     return true;
 }
@@ -438,10 +443,49 @@ std::vector<Skewb::move_t> SolutionTable::getSolution(uint64_t state) const
     return solution;
 }
 
+void SolutionTable::pushNextState(const LastState& state, Skewb::move_t move, std::vector<LastState>& nextStates)
+{
+    if (!((state.second & move) >> 1))
+    {
+        Skewb skewb(state.first);
+        skewb.makeMove(move);
+        uint64_t stateNum = skewb.getStateNum();
+        if (addEntry(state.first, stateNum, move))
+            nextStates.push_back(LastState(stateNum, move));
+    }
+}
+
+void SolutionTable::generate()
+{
+    int distance = 0;
+    std::vector<LastState> lastStates;
+    std::vector<LastState> nextStates;
+    lastStates.push_back(LastState(0, Skewb::IDENTITY));
+
+    while (!lastStates.empty())
+    {
+        distance++;
+        std::cout << "Processing " << lastStates.size() << " states with distance " << distance << "..." << std::endl;
+        for (auto& state: lastStates)
+        {
+            pushNextState(state, Skewb::UP_C, nextStates);
+            pushNextState(state, Skewb::UP_CC, nextStates);
+            pushNextState(state, Skewb::DOWN_C, nextStates);
+            pushNextState(state, Skewb::DOWN_CC, nextStates);
+            pushNextState(state, Skewb::LEFT_C, nextStates);
+            pushNextState(state, Skewb::LEFT_CC, nextStates);
+            pushNextState(state, Skewb::RIGHT_C, nextStates);
+            pushNextState(state, Skewb::RIGHT_CC, nextStates);
+        }
+        lastStates = nextStates;
+        nextStates.clear();
+    }
+}
+
 using namespace std;
 
 int main(int argc, char* argv[])
-{
+{/*
     const unsigned char centerPos[] = { 5, 4, 3, 2, 1, 0 };
     const unsigned char cornerPos[] = { 0, 1, 2, 3, 5, 7, 6, 4 };
     const unsigned char cornerRot[] = { 0, 2, 0, 0, 1, 0, 0, 0 };
@@ -453,6 +497,11 @@ int main(int argc, char* argv[])
 
     Skewb skewb2(n);
     cout << endl << "statestr: " << skewb2.getStateStr() << endl;
+*/
+
+    cout << "Generating solution table..." << endl;
+    SolutionTable solutions;
+    solutions.generate();
 
     return 0;
 } 
