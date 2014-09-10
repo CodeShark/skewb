@@ -13,7 +13,7 @@ const unsigned char SOLVED_CORNER_ROT[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 class Skewb
 {
 public:
-    // Corner names
+    // Move names
     //
     // L\     /R
     // | \   / |
@@ -26,16 +26,37 @@ public:
     // C is clockwise and CC is counterclockwise.
     // The bottom back corner is fixed.
 
+    // Center names
+    //
+    // Bottom: 0 (Orange)
+    // Top: 1 (Red)
+    // Back left: 2 (Yellow)
+    // Front right: 3 (White)
+    // Back right: 4 (Green)
+    // Front left: 5 (Blue)
+
+    // Corner names (viewed from top)
+    //
+    // Upper
+    //     4
+    //   5   7
+    //     6
+    //
+    // Lower
+    //     0
+    //   1   3
+    //     2
+
     enum move_t
     {
         UP_C    =  (1 << 1),
         UP_CC,
         DOWN_C  =  (1 << 2),
         DOWN_CC,
-        RIGHT_C =  (1 << 3),
-        RIGHT_CC,
-        LEFT_C  =  (1 << 4),
-        LEFT_CC
+        LEFT_C  =  (1 << 3),
+        LEFT_CC,
+        RIGHT_C =  (1 << 4),
+        RIGHT_CC
     };
 
     Skewb() { reset(); }
@@ -127,6 +148,146 @@ uint64_t Skewb::getStateNum() const
 
 void Skewb::makeMove(move_t move)
 {
+    unsigned char temp;
+
+    switch (move)
+    {
+    case UP_C:
+        temp = m_centerPos[1];
+        m_centerPos[1] = m_centerPos[5];
+        m_centerPos[5] = m_centerPos[3];
+        m_centerPos[3] = temp;
+
+        temp = m_cornerPos[2];
+        m_cornerPos[2] = m_cornerPos[7];
+        m_cornerPos[7] = m_cornerPos[5];
+        m_cornerPos[5] = temp;
+
+        m_cornerRot[6] = (m_cornerRot[6] + 1) % 3;
+        m_cornerRot[2] = (m_cornerRot[2] + 2) % 3;
+        m_cornerRot[4] = (m_cornerRot[4] + 2) % 3;
+        m_cornerRot[7] = (m_cornerRot[7] + 2) % 3;
+        break; 
+
+    case UP_CC:
+        temp = m_centerPos[1];
+        m_centerPos[1] = m_centerPos[3];
+        m_centerPos[3] = m_centerPos[5];
+        m_centerPos[5] = temp;
+
+        temp = m_cornerPos[2];
+        m_cornerPos[2] = m_cornerPos[5];
+        m_cornerPos[5] = m_cornerPos[7];
+        m_cornerPos[7] = temp;
+
+        m_cornerRot[6] = (m_cornerRot[6] + 2) % 3;
+        m_cornerRot[2] = (m_cornerRot[2] + 1) % 3;
+        m_cornerRot[4] = (m_cornerRot[4] + 1) % 3;
+        m_cornerRot[7] = (m_cornerRot[7] + 1) % 3;
+        break; 
+
+    case DOWN_C:
+        temp = m_centerPos[0];
+        m_centerPos[0] = m_centerPos[3];
+        m_centerPos[3] = m_centerPos[5];
+        m_centerPos[5] = temp;
+
+        temp = m_cornerPos[1];
+        m_cornerPos[1] = m_cornerPos[3];
+        m_cornerPos[3] = m_cornerPos[6];
+        m_cornerPos[6] = temp;
+
+        m_cornerRot[2] = (m_cornerRot[2] + 1) % 3;
+        m_cornerRot[1] = (m_cornerRot[1] + 2) % 3;
+        m_cornerRot[3] = (m_cornerRot[3] + 2) % 3;
+        m_cornerRot[6] = (m_cornerRot[6] + 2) % 3;
+        break; 
+
+    case DOWN_CC:
+        temp = m_centerPos[0];
+        m_centerPos[0] = m_centerPos[5];
+        m_centerPos[5] = m_centerPos[3];
+        m_centerPos[3] = temp;
+
+        temp = m_cornerPos[1];
+        m_cornerPos[1] = m_cornerPos[6];
+        m_cornerPos[6] = m_cornerPos[3];
+        m_cornerPos[3] = temp;
+
+        m_cornerRot[2] = (m_cornerRot[2] + 2) % 3;
+        m_cornerRot[1] = (m_cornerRot[1] + 1) % 3;
+        m_cornerRot[3] = (m_cornerRot[3] + 1) % 3;
+        m_cornerRot[6] = (m_cornerRot[6] + 1) % 3;
+        break; 
+
+    case LEFT_C:
+        temp = m_centerPos[1];
+        m_centerPos[1] = m_centerPos[2];
+        m_centerPos[2] = m_centerPos[5];
+        m_centerPos[5] = temp;
+
+        temp = m_cornerPos[1];
+        m_cornerPos[1] = m_cornerPos[6];
+        m_cornerPos[6] = m_cornerPos[4];
+        m_cornerPos[4] = temp;
+
+        m_cornerRot[5] = (m_cornerRot[5] + 1) % 3;
+        m_cornerRot[1] = (m_cornerRot[1] + 2) % 3;
+        m_cornerRot[4] = (m_cornerRot[4] + 2) % 3;
+        m_cornerRot[6] = (m_cornerRot[6] + 2) % 3;
+        break; 
+
+    case LEFT_CC:
+        temp = m_centerPos[1];
+        m_centerPos[1] = m_centerPos[5];
+        m_centerPos[5] = m_centerPos[2];
+        m_centerPos[2] = temp;
+
+        temp = m_cornerPos[1];
+        m_cornerPos[1] = m_cornerPos[4];
+        m_cornerPos[4] = m_cornerPos[6];
+        m_cornerPos[6] = temp;
+
+        m_cornerRot[5] = (m_cornerRot[5] + 2) % 3;
+        m_cornerRot[1] = (m_cornerRot[1] + 1) % 3;
+        m_cornerRot[4] = (m_cornerRot[4] + 1) % 3;
+        m_cornerRot[6] = (m_cornerRot[6] + 1) % 3;
+        break; 
+
+    case RIGHT_C:
+        temp = m_centerPos[1];
+        m_centerPos[1] = m_centerPos[3];
+        m_centerPos[3] = m_centerPos[4];
+        m_centerPos[4] = temp;
+
+        temp = m_cornerPos[3];
+        m_cornerPos[3] = m_cornerPos[4];
+        m_cornerPos[4] = m_cornerPos[6];
+        m_cornerPos[6] = temp;
+
+        m_cornerRot[7] = (m_cornerRot[7] + 1) % 3;
+        m_cornerRot[3] = (m_cornerRot[3] + 2) % 3;
+        m_cornerRot[4] = (m_cornerRot[4] + 2) % 3;
+        m_cornerRot[6] = (m_cornerRot[6] + 2) % 3;
+        break; 
+
+    case RIGHT_CC:
+        temp = m_centerPos[1];
+        m_centerPos[1] = m_centerPos[4];
+        m_centerPos[4] = m_centerPos[3];
+        m_centerPos[3] = temp;
+
+        temp = m_cornerPos[3];
+        m_cornerPos[3] = m_cornerPos[6];
+        m_cornerPos[6] = m_cornerPos[4];
+        m_cornerPos[4] = temp;
+
+        m_cornerRot[7] = (m_cornerRot[7] + 2) % 3;
+        m_cornerRot[3] = (m_cornerRot[3] + 1) % 3;
+        m_cornerRot[4] = (m_cornerRot[4] + 1) % 3;
+        m_cornerRot[6] = (m_cornerRot[6] + 1) % 3;
+        break; 
+    }
 }
 
 bool Skewb::isSolved() const
