@@ -74,7 +74,7 @@ void Skewb::setStateNum(uint64_t stateNum)
 {
     for (int i = 0; i < 8; i++)
     {
-        m_cornerRot[5 - i] = stateNum % 3;
+        m_cornerRot[7 - i] = stateNum % 3;
         stateNum /= 3;
     }
 
@@ -91,7 +91,7 @@ void Skewb::setStateNum(uint64_t stateNum)
     m_centerPos[5] = 0;
     for (int i = 2; i <= 6; i++)
     {
-        m_centerPos[6 - i] = stateNum % i + 1;
+        m_centerPos[6 - i] = stateNum % i;
         stateNum /= i;
     }
     for (int i = 4; i >= 0; i--)
@@ -110,18 +110,18 @@ uint64_t Skewb::getStateNum() const
             if (centerPos[j] > centerPos[i]) centerPos[j]--;
     for (int i = 0; i < 5; i++)
         n = n * (6 - i) + centerPos[i];
-/*
-    unsigned char cornerPos[8];
-    memcpy(cornerPos, m_cornerPos, 8);
-    for (int i = 0; i < 7; i++)
-        for (int j = i + 1; j < 8; j++)
+
+    unsigned char cornerPos[7];
+    memcpy(cornerPos, m_cornerPos, 7);
+    for (int i = 0; i < 6; i++)
+        for (int j = i + 1; j < 7; j++)
             if (cornerPos[j] > cornerPos[i]) cornerPos[j]--;
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 7; i++)
         n = n * (8 - i) + cornerPos[i];
 
     for (int i = 0; i < 8; i++)
         n = n * 3 + m_cornerRot[i];
-*/
+
     return n;
 }
 
@@ -140,7 +140,7 @@ bool Skewb::isSolved() const
 std::string Skewb::getStateStr() const
 {
     std::stringstream ss;
-    ss << "centerpos: { ";
+    ss << "centerPos: { ";
     bool bAddComma = false;
     for (int i = 0; i < 6; i++)
     {
@@ -148,7 +148,7 @@ std::string Skewb::getStateStr() const
         else bAddComma = true;
         ss << (int)m_centerPos[i];
     }
-    ss << " }, cornerpos: { ";
+    ss << " }, cornerPos: { ";
     bAddComma = false;
     for (int i = 0; i < 8; i++)
     {
@@ -156,7 +156,7 @@ std::string Skewb::getStateStr() const
         else bAddComma = true;
         ss << (int)m_cornerPos[i];
     }
-    ss << " }, cornerrot: { ";
+    ss << " }, cornerRot: { ";
     bAddComma = false;
     for (int i = 0; i < 8; i++)
     {
@@ -179,12 +179,12 @@ int main(int argc, char* argv[])
     const unsigned char cornerRot[] = { 0, 2, 0, 0, 1, 0, 0, 0 };
     Skewb skewb(centerPos, cornerPos, cornerRot);
 
-uint64_t n = skewb.getStateNum();
+    uint64_t n = skewb.getStateNum();
     cout << "statestr: " << skewb.getStateStr() << endl;
     cout << "statenum: " << n << endl;
 
     Skewb skewb2(n);
-    cout << endl << "statestr: " << skewb.getStateStr() << endl;
+    cout << endl << "statestr: " << skewb2.getStateStr() << endl;
 
     return 0;
 } 
