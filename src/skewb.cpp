@@ -179,7 +179,12 @@ int main(int argc, char* argv[])
     const unsigned char cornerRot[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     Skewb skewb(centerPos, cornerPos, cornerRot);
 
+uint64_t n = skewb.getStateNum();
     cout << "statestr: " << skewb.getStateStr() << endl;
-    cout << "statenum: " << skewb.getStateNum() << endl;
+    cout << "statenum: " << n << endl;
+
+    Skewb skewb2(n);
+    cout << endl << "statestr: " << skewb.getStateStr() << endl;
+
     return 0;
 } 
