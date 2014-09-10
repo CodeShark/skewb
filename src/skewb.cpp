@@ -201,9 +201,9 @@ void Skewb::makeMove(move_t move)
         m_cornerPos[5] = temp;
 
         m_cornerRot[6] = (m_cornerRot[6] + 1) % 3;
-        m_cornerRot[2] = (m_cornerRot[2] + 2) % 3;
-        m_cornerRot[4] = (m_cornerRot[4] + 2) % 3;
-        m_cornerRot[7] = (m_cornerRot[7] + 2) % 3;
+        m_cornerRot[2] = (m_cornerRot[7] + 2) % 3;
+        m_cornerRot[5] = (m_cornerRot[2] + 2) % 3;
+        m_cornerRot[7] = (m_cornerRot[5] + 2) % 3;
         break; 
 
     case UP_CC:
@@ -218,9 +218,9 @@ void Skewb::makeMove(move_t move)
         m_cornerPos[7] = temp;
 
         m_cornerRot[6] = (m_cornerRot[6] + 2) % 3;
-        m_cornerRot[2] = (m_cornerRot[2] + 1) % 3;
-        m_cornerRot[4] = (m_cornerRot[4] + 1) % 3;
-        m_cornerRot[7] = (m_cornerRot[7] + 1) % 3;
+        m_cornerRot[2] = (m_cornerRot[5] + 1) % 3;
+        m_cornerRot[5] = (m_cornerRot[7] + 1) % 3;
+        m_cornerRot[7] = (m_cornerRot[2] + 1) % 3;
         break; 
 
     case DOWN_C:
@@ -235,9 +235,9 @@ void Skewb::makeMove(move_t move)
         m_cornerPos[6] = temp;
 
         m_cornerRot[2] = (m_cornerRot[2] + 1) % 3;
-        m_cornerRot[1] = (m_cornerRot[1] + 2) % 3;
-        m_cornerRot[3] = (m_cornerRot[3] + 2) % 3;
-        m_cornerRot[6] = (m_cornerRot[6] + 2) % 3;
+        m_cornerRot[1] = (m_cornerRot[3] + 2) % 3;
+        m_cornerRot[3] = (m_cornerRot[6] + 2) % 3;
+        m_cornerRot[6] = (m_cornerRot[1] + 2) % 3;
         break; 
 
     case DOWN_CC:
@@ -252,9 +252,9 @@ void Skewb::makeMove(move_t move)
         m_cornerPos[3] = temp;
 
         m_cornerRot[2] = (m_cornerRot[2] + 2) % 3;
-        m_cornerRot[1] = (m_cornerRot[1] + 1) % 3;
-        m_cornerRot[3] = (m_cornerRot[3] + 1) % 3;
-        m_cornerRot[6] = (m_cornerRot[6] + 1) % 3;
+        m_cornerRot[1] = (m_cornerRot[6] + 1) % 3;
+        m_cornerRot[3] = (m_cornerRot[1] + 1) % 3;
+        m_cornerRot[6] = (m_cornerRot[3] + 1) % 3;
         break; 
 
     case LEFT_C:
@@ -269,9 +269,9 @@ void Skewb::makeMove(move_t move)
         m_cornerPos[4] = temp;
 
         m_cornerRot[5] = (m_cornerRot[5] + 1) % 3;
-        m_cornerRot[1] = (m_cornerRot[1] + 2) % 3;
-        m_cornerRot[4] = (m_cornerRot[4] + 2) % 3;
-        m_cornerRot[6] = (m_cornerRot[6] + 2) % 3;
+        m_cornerRot[1] = (m_cornerRot[6] + 2) % 3;
+        m_cornerRot[4] = (m_cornerRot[1] + 2) % 3;
+        m_cornerRot[6] = (m_cornerRot[4] + 2) % 3;
         break; 
 
     case LEFT_CC:
@@ -286,9 +286,9 @@ void Skewb::makeMove(move_t move)
         m_cornerPos[6] = temp;
 
         m_cornerRot[5] = (m_cornerRot[5] + 2) % 3;
-        m_cornerRot[1] = (m_cornerRot[1] + 1) % 3;
-        m_cornerRot[4] = (m_cornerRot[4] + 1) % 3;
-        m_cornerRot[6] = (m_cornerRot[6] + 1) % 3;
+        m_cornerRot[1] = (m_cornerRot[4] + 1) % 3;
+        m_cornerRot[4] = (m_cornerRot[6] + 1) % 3;
+        m_cornerRot[6] = (m_cornerRot[1] + 1) % 3;
         break; 
 
     case RIGHT_C:
@@ -303,9 +303,9 @@ void Skewb::makeMove(move_t move)
         m_cornerPos[6] = temp;
 
         m_cornerRot[7] = (m_cornerRot[7] + 1) % 3;
-        m_cornerRot[3] = (m_cornerRot[3] + 2) % 3;
-        m_cornerRot[4] = (m_cornerRot[4] + 2) % 3;
-        m_cornerRot[6] = (m_cornerRot[6] + 2) % 3;
+        m_cornerRot[3] = (m_cornerRot[4] + 2) % 3;
+        m_cornerRot[4] = (m_cornerRot[6] + 2) % 3;
+        m_cornerRot[6] = (m_cornerRot[3] + 2) % 3;
         break; 
 
     case RIGHT_CC:
@@ -320,9 +320,9 @@ void Skewb::makeMove(move_t move)
         m_cornerPos[4] = temp;
 
         m_cornerRot[7] = (m_cornerRot[7] + 2) % 3;
-        m_cornerRot[3] = (m_cornerRot[3] + 1) % 3;
-        m_cornerRot[4] = (m_cornerRot[4] + 1) % 3;
-        m_cornerRot[6] = (m_cornerRot[6] + 1) % 3;
+        m_cornerRot[3] = (m_cornerRot[6] + 1) % 3;
+        m_cornerRot[4] = (m_cornerRot[3] + 1) % 3;
+        m_cornerRot[6] = (m_cornerRot[4] + 1) % 3;
         break; 
     }
 }
@@ -522,9 +522,33 @@ int main(int argc, char* argv[])
         SolutionTable solutions;
         solutions.generate();
 
+        // Bottom: 0 (Orange)
+        // Top: 1 (Red)
+        // Back left: 2 (Yellow)
+        // Front right: 3 (White)
+        // Back right: 4 (Green)
+        // Front left: 5 (Blue)
+
+        const unsigned char centerPos[] = { 0, 4, 2, 1, 3, 5 };
+        const unsigned char cornerPos[] = { 0, 3, 2, 1, 6, 5, 4, 7 };
+        const unsigned char cornerRot[] = { 0, 1, 2, 1, 1, 2, 0, 2 };
+
+/*
+        const unsigned char centerPos[] = { 0, 5, 2, 1, 4, 3 };
+        const unsigned char cornerPos[] = { 0, 1, 7, 3, 4, 2, 6, 5 };
+        const unsigned char cornerRot[] = { 0, 0, 2, 0, 0, 2, 1, 2 };
+*/
+        Skewb skewb(centerPos, cornerPos, cornerRot);
+/*
         Skewb skewb;
         skewb.makeMove(Skewb::UP_C);
+        skewb.makeMove(Skewb::UP_C);
+        skewb.makeMove(Skewb::LEFT_C);
+        skewb.makeMove(Skewb::DOWN_C);
+        skewb.makeMove(Skewb::LEFT_C);
+        skewb.makeMove(Skewb::UP_C);
         skewb.makeMove(Skewb::RIGHT_CC);
+*/
         uint64_t stateNum = skewb.getStateNum();
 
         cout << "Solving state " << stateNum << "..." << endl;
