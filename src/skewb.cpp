@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <map>
 #include <string>
 #include <sstream>
 #include <cstring>
@@ -49,6 +50,7 @@ public:
 
     enum move_t
     {
+        IDENTITY = 0,
         UP_C    =  (1 << 1),
         UP_CC,
         DOWN_C  =  (1 << 2),
@@ -58,6 +60,38 @@ public:
         RIGHT_C =  (1 << 4),
         RIGHT_CC
     };
+
+    static const char* getMoveSymbol(move_t move)
+    {
+        switch (move)
+        {
+        case IDENTITY:  return "I";
+        case UP_C:      return "U";
+        case UP_CC:     return "U'";
+        case DOWN_C:    return "D";
+        case DOWN_CC:   return "D'";
+        case LEFT_C:    return "L";
+        case LEFT_CC:   return "L'";
+        case RIGHT_C:   return "R";
+        case RIGHT_CC:  return "R'";
+        }
+    }
+
+    static move_t getInverse(move_t move)
+    {
+        switch (move)
+        {
+        case IDENTITY:  return IDENTITY;
+        case UP_C:      return UP_CC;
+        case UP_CC:     return UP_C;
+        case DOWN_C:    return DOWN_CC;
+        case DOWN_CC:   return DOWN_C;
+        case LEFT_C:    return LEFT_CC;
+        case LEFT_CC:   return LEFT_C;
+        case RIGHT_C:   return RIGHT_CC;
+        case RIGHT_CC:  return RIGHT_C;
+        }
+    }
 
     Skewb() { reset(); }
     explicit Skewb(uint64_t stateNum) { setStateNum(stateNum); }
@@ -152,6 +186,9 @@ void Skewb::makeMove(move_t move)
 
     switch (move)
     {
+    case IDENTITY:
+        break;
+
     case UP_C:
         temp = m_centerPos[1];
         m_centerPos[1] = m_centerPos[5];
@@ -329,6 +366,74 @@ std::string Skewb::getStateStr() const
 
     return ss.str();
         
+}
+
+
+class TableEntry
+{
+public:
+    TableEntry(uint64_t prevState, int distance, Skewb::move_t move)
+        : m_prevState(prevState), m_distance(distance), m_move(move) { }
+
+    uint64_t getPrevState() const { return m_prevState; }
+    int getDistance() const { return m_distance; }
+    Skewb::move_t getMove() const { return m_move; }
+
+private:
+    uint64_t m_prevState;
+    int m_distance;
+    Skewb::move_t m_move;
+};
+
+typedef std::pair<uint64_t, TableEntry> TablePair;
+
+class SolutionTable
+{
+public:
+    SolutionTable();
+
+    bool addEntry(uint64_t prevState, uint64_t newState, Skewb::move_t move);
+    uint64_t size() const { return m_table.size(); }
+
+    std::vector<Skewb::move_t> getSolution(uint64_t state) const;
+    int getMaxDistance() const { return m_maxDistance; }
+
+private:
+    std::map<uint64_t, TableEntry> m_table;
+    int m_maxDistance;
+};
+
+SolutionTable::SolutionTable() : m_maxDistance(0)
+{
+    m_table.insert(TablePair(0, TableEntry(0, 0, Skewb::IDENTITY)));
+}
+
+bool SolutionTable::addEntry(uint64_t prevState, uint64_t newState, Skewb::move_t move)
+{
+    if (m_table.count(newState)) return false;
+
+    const auto& it = m_table.find(prevState);
+    if (it == m_table.end()) throw std::runtime_error("Previous entry not found.");
+
+    m_table.insert(TablePair(newState, TableEntry(prevState, it->second.getDistance() + 1, move))); 
+
+    return true;
+}
+
+std::vector<Skewb::move_t> SolutionTable::getSolution(uint64_t state) const
+{
+    const Tab& it = m_table.find(state);
+    if (it == m_table.end()) throw std::runtime_error("State not found.");
+
+    std::vector<Skewb::move_t> solution;
+    while (it->second.getDistance() > 0)
+    {
+        solution.push_back(Skewb::getInverse(it->second.getMove()));
+        it = m_table.find(it->second.getPrevState());
+        if (it == m_table.end()) throw std::runtime_error("Solution is missing.");
+    }
+
+    return solution;
 }
 
 using namespace std;
