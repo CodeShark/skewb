@@ -397,6 +397,7 @@ public:
     uint64_t size() const { return m_table.size(); }
 
     std::vector<Skewb::move_t> getSolution(uint64_t state) const;
+    std::string getSolutionStr(uint64_t state) const;
     int getMaxDistance() const { return m_maxDistance; }
 
     void generate();
@@ -441,6 +442,18 @@ std::vector<Skewb::move_t> SolutionTable::getSolution(uint64_t state) const
     }
 
     return solution;
+}
+
+std::string SolutionTable::getSolutionStr(uint64_t state) const
+{
+    std::vector<Skewb::move_t> solution = getSolution(state);
+
+    std::stringstream ss;
+    for (auto& move: solution)
+    {
+        ss << Skewb::getMoveSymbol(move) << " ";
+    }
+    return ss.str();
 }
 
 void SolutionTable::pushNextState(const LastState& state, Skewb::move_t move, std::vector<LastState>& nextStates)
@@ -500,9 +513,23 @@ int main(int argc, char* argv[])
     cout << endl << "statestr: " << skewb2.getStateStr() << endl;
 */
 
-    cout << "Generating solution table..." << endl;
-    SolutionTable solutions;
-    solutions.generate();
+    try
+    {
+        cout << "Generating solution table..." << endl;
+        SolutionTable solutions;
+        solutions.generate();
 
+        Skewb skewb;
+        skewb.makeMove(Skewb::UP_C);
+        skewb.makeMove(Skewb::RIGHT_CC);
+
+        cout << "Solution: " << solutions.getSolutionStr(skewb.getStateNum()) << endl;
+    }
+    catch (const exception& e)
+    {
+        cerr << "Error: " << e.what() << endl;
+        return -1;
+    } 
+    
     return 0;
 } 
