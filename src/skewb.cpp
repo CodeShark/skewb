@@ -175,8 +175,8 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     const unsigned char centerPos[] = { 5, 4, 3, 2, 1, 0 };
-    const unsigned char cornerPos[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
-    const unsigned char cornerRot[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    const unsigned char cornerPos[] = { 0, 1, 2, 3, 5, 7, 6, 4 };
+    const unsigned char cornerRot[] = { 0, 2, 0, 0, 1, 0, 0, 0 };
     Skewb skewb(centerPos, cornerPos, cornerRot);
 
 uint64_t n = skewb.getStateNum();
