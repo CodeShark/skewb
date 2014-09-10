@@ -41,6 +41,8 @@ public:
     explicit Skewb(const Skewb& other) { set(other.m_centerPos, other.m_cornerPos, other.m_cornerRot); }
     Skewb(const unsigned char* centerPos, const unsigned char* cornerPos, const unsigned char* cornerRot) { set(centerPos, cornerPos, cornerRot); }
 
+    Skewb& operator=(const Skewb& other) { set(other.m_centerPos, other.m_cornerPos, other.m_cornerRot); return *this; }
+
     void set(const unsigned char* centerPos, const unsigned char* cornerPos, const unsigned char* cornerRot);
     void reset() { set(SOLVED_CENTER_POS, SOLVED_CORNER_POS,  SOLVED_CORNER_ROT); }
 
