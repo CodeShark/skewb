@@ -562,7 +562,7 @@ int main(int argc, char* argv[])
 
         const unsigned char centerPos[] = { YELLOW, RED, ORANGE, BLUE, GREEN, WHITE };
         const unsigned char cornerPos[] = { OGY, OYB, OBW, RYG, RWB, RBY, OWG, RGW };
-        const unsigned char cornerRot[] = { 0, 2, 1, 1, 1, 0, 1, 0 };
+        const unsigned char cornerRot[] = { 0, 2, 1, 1, 2, 0, 1, 0 };
 
         Skewb skewb(centerPos, cornerPos, cornerRot);
         uint64_t stateNum = skewb.getStateNum();
