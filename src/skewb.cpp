@@ -16,7 +16,8 @@ public:
     //   \ | /
     //    \D/
 
-    // C is clockwise and CC is counterclockwise
+    // C is clockwise and CC is counterclockwise.
+    // The bottom back corner is fixed.
 
     enum move_t
     {
@@ -65,8 +66,9 @@ uint64_t Skewb::getStateNum() const
     uint64_t stateNum = 0;
     for (int i = 0; i < 6; i++)
     {
-        stateNum += 
-    }    
+        //stateNum +
+    }
+    return 0;
 }
 
 void Skewb::makeMove(move_t move)
@@ -75,6 +77,10 @@ void Skewb::makeMove(move_t move)
 
 bool Skewb::isSolved() const
 {
+    for (int i = 0; i < 6; i++) { if (m_centerPos[i] != i) return false; }
+    for (int i = 0; i < 8; i++) { if (m_cornerPos[i] != i) return false; }
+    for (int i = 0; i < 8; i++) { if (m_cornerRot[i] != 0) return false; }
+    return true;
 }
 
 using namespace std;
