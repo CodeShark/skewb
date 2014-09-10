@@ -464,8 +464,9 @@ void SolutionTable::generate()
 
     while (!lastStates.empty())
     {
-        distance++;
         std::cout << "Processing " << lastStates.size() << " states with distance " << distance << "..." << std::endl;
+
+        distance++;
         for (auto& state: lastStates)
         {
             pushNextState(state, Skewb::UP_C, nextStates);
