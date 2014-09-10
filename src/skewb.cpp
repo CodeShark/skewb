@@ -531,23 +531,57 @@ void SolutionTable::generate()
 
 using namespace std;
 
+void getState(char* argv[], unsigned char* centerPos, unsigned char* cornerPos, unsigned char* cornerRot)
+{
+    for (int i = 1; i <= 6; i++)
+    {
+        if (strcmp(argv[i], "o") == 0) centerPos[i - 1] = ORANGE;
+        else if (strcmp(argv[i], "r") == 0) centerPos[i - 1] = RED;
+        else if (strcmp(argv[i], "y") == 0) centerPos[i - 1] = YELLOW;
+        else if (strcmp(argv[i], "w") == 0) centerPos[i - 1] = WHITE;
+        else if (strcmp(argv[i], "g") == 0) centerPos[i - 1] = GREEN;
+        else if (strcmp(argv[i], "b") == 0) centerPos[i - 1] = BLUE;
+        else throw runtime_error("Invalid center color.");
+    }
+
+    cornerPos[0] = OGY;
+    for (int i = 7; i <= 13; i++)
+    {
+        if (strcmp(argv[i], "oyb") == 0) cornerPos[i - 6] = OYB;
+        else if (strcmp(argv[i], "obw") == 0) cornerPos[i - 6] = OBW;
+        else if (strcmp(argv[i], "owg") == 0) cornerPos[i - 6] = OWG;
+        else if (strcmp(argv[i], "ryg") == 0) cornerPos[i - 6] = RYG;
+        else if (strcmp(argv[i], "rby") == 0) cornerPos[i - 6] = RBY;
+        else if (strcmp(argv[i], "rwb") == 0) cornerPos[i - 6] = RWB;
+        else if (strcmp(argv[i], "rgw") == 0) cornerPos[i - 6] = RGW;
+        else throw runtime_error("Invalid corner name.");
+    }
+
+    cornerRot[0] = 0;
+    for (int i = 14; i <= 20; i++)
+    {
+        if (strcmp(argv[i], "0") == 0) cornerRot[i - 13] = 0;
+        else if (strcmp(argv[i], "1") == 0) cornerRot[i - 13] = 1;
+        else if (strcmp(argv[i], "2") == 0) cornerRot[i - 13] = 2;
+        else throw runtime_error("Invalid corner rotation.");
+    }
+}
+
 int main(int argc, char* argv[])
-{/*
-    const unsigned char centerPos[] = { 5, 4, 3, 2, 1, 0 };
-    const unsigned char cornerPos[] = { 0, 1, 2, 3, 5, 7, 6, 4 };
-    const unsigned char cornerRot[] = { 0, 2, 0, 0, 1, 0, 0, 0 };
-    Skewb skewb(centerPos, cornerPos, cornerRot);
-
-    uint64_t n = skewb.getStateNum();
-    cout << "statestr: " << skewb.getStateStr() << endl;
-    cout << "statenum: " << n << endl;
-
-    Skewb skewb2(n);
-    cout << endl << "statestr: " << skewb2.getStateStr() << endl;
-*/
+{
+    if (argc != 21)
+    {
+        cerr << "# Usage: " << argv[0] << " <state>" << endl;
+        return 1;
+    }
 
     try
     {
+        unsigned char centerPos[6];
+        unsigned char cornerPos[8];
+        unsigned char cornerRot[8];
+        getState(argv, centerPos, cornerPos, cornerRot);
+
         cout << "Generating solution table..." << endl;
         SolutionTable solutions;
         solutions.generate();
@@ -559,11 +593,12 @@ int main(int argc, char* argv[])
         // Back right: 4 (Green)
         // Front left: 5 (Blue)
 
-
-        const unsigned char centerPos[] = { YELLOW, RED, ORANGE, BLUE, GREEN, WHITE };
-        const unsigned char cornerPos[] = { OGY, OYB, OBW, RYG, RWB, RBY, OWG, RGW };
-        const unsigned char cornerRot[] = { 0, 2, 1, 1, 2, 0, 1, 0 };
-
+        // Back bottom corner must be OGY with orange on bottom.
+/*
+        const unsigned char centerPos[] = { GREEN, YELLOW, RED, ORANGE, BLUE, WHITE };
+        const unsigned char cornerPos[] = { OGY, OWG, RBY, RWB, RYG, RGW, OYB, OBW };
+        const unsigned char cornerRot[] = { 0, 1, 0, 2, 0, 1, 2, 0 };
+*/
         Skewb skewb(centerPos, cornerPos, cornerRot);
         uint64_t stateNum = skewb.getStateNum();
 
