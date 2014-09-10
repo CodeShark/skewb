@@ -398,6 +398,8 @@ public:
     std::vector<Skewb::move_t> getSolution(uint64_t state) const;
     int getMaxDistance() const { return m_maxDistance; }
 
+    void generate();
+
 private:
     std::map<uint64_t, TableEntry> m_table;
     int m_maxDistance;
